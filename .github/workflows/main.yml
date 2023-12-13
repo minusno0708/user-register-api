@@ -1,4 +1,4 @@
-name: Run gotest
+name: Run Go test
 on: pull_request
 
 jobs:
@@ -8,6 +8,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21.4'
