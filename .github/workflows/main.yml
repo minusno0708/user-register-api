@@ -16,7 +16,9 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
       - name: Run Server
-        run: go run main.go
+        run: |
+          nohup go run main.go &
+          sleep 5
       - name: Test with the Go CLI
         run: go test
   
