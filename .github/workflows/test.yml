@@ -11,7 +11,9 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run docker container and server
-        run: docker-compose up -d & sleep 20
+        run: |
+          docker-compose up -d
+          until curl -s localhost:8080; do sleep 5; done
       - name: Test with the Go CLI
         run: docker-compose exec -T server go test -v ./...
   
