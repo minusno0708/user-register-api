@@ -9,3 +9,10 @@ services:
     ports:
       - 8080:8080
     command: go run main.go
+
+  db:
+    image: mysql:8.2
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
