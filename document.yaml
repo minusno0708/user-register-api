@@ -1,4 +1,4 @@
-swagger: '2.0'
+openapi: '3.0.0'
 
 info:
   version: "1.0.0"
@@ -36,42 +36,47 @@ paths:
           required: true
           schema:
             type: "object"
+            required:
+              - user_id
+              - password
             properties:
               user_id:
                 type: "string"
-                required: true
               username:
                 type: "string"
               password:
                 type: "string"
-                required: true
 
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User created successfully"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User created successfully"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
           description: リクエストの形式が正しくない場合や既に存在するユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User already exists"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already exists"
 
   /user/{user_id}: 
     get:
@@ -97,29 +102,33 @@ paths:
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be acquired"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User can be acquired"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
           description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User does not exist"
     put:
       tags:
         - user
@@ -145,29 +154,33 @@ paths:
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be updated"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User can be updated"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
           description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User does not exist"
 
   /delete/{user_id}:
     delete:
@@ -193,17 +206,21 @@ paths:
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be deleted"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User can be deleted"
         400:
           description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User does not exist"
