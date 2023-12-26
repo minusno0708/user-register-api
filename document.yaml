@@ -128,7 +128,7 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: パスワードが正しくない場合や存在しないユーザーIDの場合
+          description: Failed responses
           content:
             application/json:
               schema:
@@ -192,7 +192,7 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: パスワードが正しくない場合や存在しないユーザーIDの場合
+          description: Failed responses
           content:
             application/json:
               schema:
@@ -200,6 +200,19 @@ paths:
                   - $ref: '#/components/responses/UnauthorizedError'
                   - $ref: '#/components/responses/PassIncorrectError'
                   - $ref: '#/components/responses/UserDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: パスワードが正しくない場合
+                  value:
+                    message: Password is incorrect
+                response3:
+                  summary: 存在しないユーザーIDの場合
+                  value:
+                    message: User does not exist
 
   /delete/{user_id}:
     delete:
