@@ -16,12 +16,14 @@ paths:
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "Connect successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Connect successfully"
 
   /signin:
     post:
