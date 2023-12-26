@@ -68,15 +68,23 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: リクエストの形式が正しくない場合や既に存在するユーザーIDの場合
+          description: Failed responses
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User already exists"
+                oneOf:
+                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: 既に存在するユーザーIDの場合
+                  value:
+                    message: User already exists
+
 
   /user/{user_id}: 
     get:
@@ -224,3 +232,24 @@ paths:
                   message:
                     type: string
                     example: "User does not exist"
+
+components:
+  responses:
+    UnauthorizedError:
+      type: object
+      properties:
+        unauthrized:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Unauthorized"
+    UserAlreadyExistsError:
+      type: object
+      properties:
+        user_already_exist:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "User already exists"
