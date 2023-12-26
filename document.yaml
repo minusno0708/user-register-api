@@ -1,4 +1,4 @@
-swagger: '2.0'
+openapi: '3.0.0'
 
 info:
   version: "1.0.0"
@@ -16,12 +16,14 @@ paths:
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "Connect successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Connect successfully"
 
   /signin:
     post:
@@ -36,42 +38,55 @@ paths:
           required: true
           schema:
             type: "object"
+            required:
+              - user_id
+              - password
             properties:
               user_id:
                 type: "string"
-                required: true
               username:
                 type: "string"
-              passwork:
+              password:
                 type: "string"
-                required: true
 
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User created successfully"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User created successfully"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
-          description: リクエストの形式が正しくない場合や既に存在するユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User already exists"
+          description: Failed responses
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: 既に存在するユーザーIDの場合
+                  value:
+                    message: User already exists
+
 
   /user/{user_id}: 
     get:
@@ -91,35 +106,51 @@ paths:
           schema:
             type: "object"
             properties:
-              passwork:
+              password:
                 type: "string"
 
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be acquired"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User can be acquired"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
-          description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          description: Failed responses
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/PassIncorrectError'
+                  - $ref: '#/components/responses/UserDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: パスワードが正しくない場合
+                  value:
+                    message: Password is incorrect
+                response3:
+                  summary: 存在しないユーザーIDの場合
+                  value:
+                    message: User does not exist
     put:
       tags:
         - user
@@ -139,35 +170,51 @@ paths:
             properties:
               username:
                 type: "string"
-              passwork:
+              password:
                 type: "string"
 
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be updated"
-              user:
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  user_id:
+                  message:
                     type: string
-                    example: "user_id"
-                  username:
-                    type: string
-                    example: "username"
+                    example: "User can be updated"
+                  user:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "user_id"
+                      username:
+                        type: string
+                        example: "username"
         400:
-          description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          description: Failed responses
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/PassIncorrectError'
+                  - $ref: '#/components/responses/UserDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: パスワードが正しくない場合
+                  value:
+                    message: Password is incorrect
+                response3:
+                  summary: 存在しないユーザーIDの場合
+                  value:
+                    message: User does not exist
 
   /delete/{user_id}:
     delete:
@@ -187,23 +234,78 @@ paths:
           schema:
             type: "object"
             properties:
-              passwork:
+              password:
                 type: "string"
       
       responses:
         200:
           description: Successful responses
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User can be deleted"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User can be deleted"
         400:
-          description: パスワードが正しくない場合や存在しないユーザーIDの場合
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "User does not exist"
+          description: Failed responses
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/PassIncorrectError'
+                  - $ref: '#/components/responses/UserDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない又は形式が正しくない場合
+                  value:
+                    message: Unauthorized
+                response2:
+                  summary: パスワードが正しくない場合
+                  value:
+                    message: Password is incorrect
+                response3:
+                  summary: 存在しないユーザーIDの場合
+                  value:
+                    message: User does not exist
+
+components:
+  responses:
+    UnauthorizedError:
+      type: object
+      properties:
+        unauthrized:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Unauthorized"
+    PassIncorrectError:
+      type: object
+      properties:
+        pass_incorrect:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Password is incorrect"
+    UserAlreadyExistsError:
+      type: object
+      properties:
+        user_already_exist:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "User already exists"
+    UserDoesNotExistError:
+      type: object
+      properties:
+        user_does_not_exist:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "User does not exist"
