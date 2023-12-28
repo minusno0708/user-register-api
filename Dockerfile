@@ -4,4 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod tidy
+RUN apk update && apk --no-cache add git && \
+    go mod tidy && \
+    go install github.com/cosmtrek/air@latest
+
+CMD ["air", "-c", ".air.toml"]
