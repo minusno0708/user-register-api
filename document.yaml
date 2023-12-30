@@ -75,13 +75,13 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/BodyValidationError'
                   - $ref: '#/components/responses/UserAlreadyExistsError'
               examples:
                 response1:
                   summary: Bodyが存在しない又は形式が正しくない場合
                   value:
-                    message: Unauthorized
+                    message: Body is not valid
                 response2:
                   summary: 既に存在するユーザーIDの場合
                   value:
@@ -135,14 +135,14 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/BodyValidationError'
                   - $ref: '#/components/responses/PassIncorrectError'
                   - $ref: '#/components/responses/UserDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない又は形式が正しくない場合
                   value:
-                    message: Unauthorized
+                    message: Body is not valid
                 response2:
                   summary: パスワードが正しくない場合
                   value:
@@ -199,14 +199,14 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/BodyValidationError'
                   - $ref: '#/components/responses/PassIncorrectError'
                   - $ref: '#/components/responses/UserDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない又は形式が正しくない場合
                   value:
-                    message: Unauthorized
+                    message: Body is not valid
                 response2:
                   summary: パスワードが正しくない場合
                   value:
@@ -254,14 +254,14 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
+                  - $ref: '#/components/responses/BodyValidationError'
                   - $ref: '#/components/responses/PassIncorrectError'
                   - $ref: '#/components/responses/UserDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない又は形式が正しくない場合
                   value:
-                    message: Unauthorized
+                    message: Body is not valid
                 response2:
                   summary: パスワードが正しくない場合
                   value:
@@ -273,7 +273,7 @@ paths:
 
 components:
   responses:
-    UnauthorizedError:
+    BodyValidationError:
       type: object
       properties:
         unauthrized:
@@ -281,7 +281,7 @@ components:
           properties:
             message:
               type: string
-              example: "Unauthorized"
+              example: "Body is not valid"
     PassIncorrectError:
       type: object
       properties:

@@ -22,13 +22,13 @@ func main() {
 		var user User
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "Bad Request",
+				"message": "Body is not valid",
 			})
 			return
 		}
 		if user.UserID == "" || user.Password == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"message": "Unauthorized",
+				"message": "Body is not valid",
 			})
 			return
 		}
