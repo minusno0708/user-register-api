@@ -177,8 +177,8 @@ func TestSigninSuccessUsernameExist(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Expected status code 200, got %v", resp.StatusCode)
+	if resp.StatusCode != http.StatusCreated {
+		t.Fatalf("Expected status code 201, got %v", resp.StatusCode)
 	}
 
 	responseData, _ := ioutil.ReadAll(resp.Body)
@@ -228,8 +228,8 @@ func TestSigninSuccessUsernameNotExist(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Expected status code 200, got %v", resp.StatusCode)
+	if resp.StatusCode != http.StatusCreated {
+		t.Fatalf("Expected status code 201, got %v", resp.StatusCode)
 	}
 
 	responseData, _ := ioutil.ReadAll(resp.Body)

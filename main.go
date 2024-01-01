@@ -35,7 +35,7 @@ func main() {
 		if user.Username == "" {
 			user.Username = user.UserID
 		}
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusCreated, gin.H{
 			"message": "User created successfully",
 			"user": user,
 		})
