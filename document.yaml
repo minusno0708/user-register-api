@@ -32,22 +32,26 @@ paths:
       description: |
         新しいユーザーを登録する
 
-      parameters:
-        - name: "body"
-          in: "body"
-          required: true
-          schema:
-            type: "object"
-            required:
-              - user_id
-              - password
-            properties:
-              user_id:
-                type: "string"
-              username:
-                type: "string"
-              password:
-                type: "string"
+      requestBody:
+        description: ユーザー情報
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - password
+              properties:
+                user_id:
+                  type: "string"
+                  example: "user_id"
+                username:
+                  type: "string"
+                  example: "username"
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
         201:
@@ -114,16 +118,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
         200:
@@ -195,18 +207,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              username:
-                type: "string"
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
         200:
@@ -272,16 +290,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
       
       responses:
         200:
@@ -329,11 +355,11 @@ paths:
                     message: User already exists
 
 components:
-  responses:
+  schemas:
     BodyDoesNotExistError:
       type: object
       properties:
-        body_not_exists:
+        body_does_not_exists:
           type: object
           properties:
             message:
@@ -342,7 +368,7 @@ components:
     BodyValidationError:
       type: object
       properties:
-        unauthrized:
+        body_validation:
           type: object
           properties:
             message:
@@ -360,7 +386,7 @@ components:
     UserAlreadyExistsError:
       type: object
       properties:
-        user_already_exist:
+        user_already_exists:
           type: object
           properties:
             message:
@@ -369,18 +395,9 @@ components:
     UserNotFoundError:
       type: object
       properties:
-        user_does_not_exist:
+        user_not_found:
           type: object
           properties:
             message:
               type: string
               example: "User not found"
-    UserDoesNotExistError:
-      type: object
-      properties:
-        user_does_not_exist:
-          type: object
-          properties:
-            message:
-              type: string
-              example: "User does not exist"
