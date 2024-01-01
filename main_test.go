@@ -38,7 +38,7 @@ func TestConnectionApi(t *testing.T) {
 }
 
 func TestSigninBodyNotExist(t *testing.T) {
-	expectedMessage := "Body is not valid"
+	expectedMessage := "Body does not exist"
 
 	req, err := http.NewRequest("POST", endpoint+"/signin", nil)
 	if err != nil {

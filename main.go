@@ -22,7 +22,7 @@ func main() {
 		var user User
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "Body is not valid",
+				"message": "Body does not exist",
 			})
 			return
 		}

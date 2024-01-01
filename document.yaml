@@ -50,7 +50,7 @@ paths:
                 type: "string"
 
       responses:
-        200:
+        201:
           description: Successful responses
           content:
             application/json:
@@ -70,19 +70,35 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/BodyValidationError'
-                  - $ref: '#/components/responses/UserAlreadyExistsError'
+                $ref: '#/components/responses/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
+                  value:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
                   value:
                     message: Body is not valid
-                response2:
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserAlreadyExistsError'
+              examples:
+                response1:
                   summary: 既に存在するユーザーIDの場合
                   value:
                     message: User already exists
@@ -130,27 +146,46 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BodyDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない場合
+                  value:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
           content:
             application/json:
               schema:
                 oneOf:
                   - $ref: '#/components/responses/BodyValidationError'
                   - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyの形式が正しくない場合
                   value:
                     message: Body is not valid
                 response2:
                   summary: パスワードが正しくない場合
                   value:
                     message: Password is incorrect
-                response3:
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/responses/UserNotFoundError'
+              examples:
+                response1:
                   summary: 存在しないユーザーIDの場合
                   value:
-                    message: User does not exist
+                    message: User Not Found
+
     put:
       tags:
         - user
@@ -194,27 +229,38 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/BodyValidationError'
-                  - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
+                $ref: '#/components/responses/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
+                  value:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
                   value:
                     message: Body is not valid
-                response2:
-                  summary: パスワードが正しくない場合
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: 既に存在するユーザーIDの場合
                   value:
-                    message: Password is incorrect
-                response3:
-                  summary: 存在しないユーザーIDの場合
-                  value:
-                    message: User does not exist
+                    message: User already exists
 
   /delete/{user_id}:
     delete:
@@ -249,30 +295,50 @@ paths:
                     type: string
                     example: "User can be deleted"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/BodyValidationError'
-                  - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
+                $ref: '#/components/responses/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
+                  value:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
                   value:
                     message: Body is not valid
-                response2:
-                  summary: パスワードが正しくない場合
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: 既に存在するユーザーIDの場合
                   value:
-                    message: Password is incorrect
-                response3:
-                  summary: 存在しないユーザーIDの場合
-                  value:
-                    message: User does not exist
+                    message: User already exists
 
 components:
   responses:
+    BodyDoesNotExistError:
+      type: object
+      properties:
+        body_not_exists:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Body does not exist"
     BodyValidationError:
       type: object
       properties:
@@ -300,6 +366,15 @@ components:
             message:
               type: string
               example: "User already exists"
+    UserNotFoundError:
+      type: object
+      properties:
+        user_does_not_exist:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "User not found"
     UserDoesNotExistError:
       type: object
       properties:
