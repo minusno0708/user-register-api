@@ -154,8 +154,8 @@ func TestSigninSuccessUsernameExist(t *testing.T) {
 	expectedMessage := "User created successfully"
 
 	requestBody := &User{
-		UserID: "testuser",
-		Username: "testuser",
+		UserID: "testuser_id1",
+		Username: "testusername",
 		Password: "testpass",
 	}
 
@@ -206,7 +206,7 @@ func TestSigninSuccessUsernameNotExist(t *testing.T) {
 	expectedMessage := "User created successfully"
 
 	requestBody := &User{
-		UserID: "testuser",
+		UserID: "testuser_id2",
 		Password: "testpass",
 	}
 
