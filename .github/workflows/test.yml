@@ -14,7 +14,6 @@ jobs:
         run: |
           docker-compose up -d
           until curl -s localhost:8080; do sleep 5; done
-          urtil curl -s localhost:3306; do sleep 5; done
       - name: Test with the Go CLI
         run: docker-compose exec -T server go test -v ./...
   
