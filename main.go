@@ -31,6 +31,15 @@ func main() {
 		if user.Username == "" {
 			user.Username = user.UserID
 		}
+
+		err := model.InsertUser(user)
+		if err != nil {
+			c.JSON(http.StatusConflict, gin.H{
+				"message": "User already exists",
+			})
+			return
+		}
+
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "User created successfully",
 			"user": user,
