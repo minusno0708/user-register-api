@@ -47,3 +47,10 @@ func TestFindUserByUserID(t *testing.T) {
 		t.Errorf("Password is not match")
 	}
 }
+
+func TestDeleteUser(t *testing.T) {
+	err := DeleteUser(testUser.UserID)
+	if err != nil {
+		t.Error(err)
+	}
+}

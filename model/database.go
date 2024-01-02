@@ -58,3 +58,21 @@ func findUserByUserID(userID string) (User, error) {
 
 	return user, nil
 }
+
+func DeleteUser(userID string) error {
+	db, err := connectDB()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec(
+		"DELETE FROM users WHERE user_id = ?",
+		userID,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
