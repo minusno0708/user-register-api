@@ -5,9 +5,21 @@ import (
 )
 
 func TestConnectionDB(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := connectDB()
 	if err != nil {
-		t.Error("Error connecting to database")
+		t.Error(err)
 	}
 	defer db.Close()
+}
+
+func TestInsertUser(t *testing.T) {
+	user := User{
+		UserID:   "testuser_db",
+		Username: "testuser_db",
+		Password: "test_password",
+	}
+	err := InsertUser(user)
+	if err != nil {
+		t.Error(err)
+	}
 }

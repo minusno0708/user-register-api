@@ -3,13 +3,9 @@ package main
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-)
 
-type User struct {
-	UserID   string `json:"user_id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+	"user-register-api/model"
+)
 
 func main() {
 	r := gin.Default()
@@ -19,7 +15,7 @@ func main() {
 		})
 	})
 	r.POST("/signin", func(c *gin.Context) {
-		var user User
+		var user model.User
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": "Body does not exist",
