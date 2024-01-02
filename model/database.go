@@ -6,7 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var dbAddress = "0.0.0.0:3306"
+var dbAddress = "localhost:3306"
 
 func connectDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", "root:root@tcp("+dbAddress+")/test_db")
