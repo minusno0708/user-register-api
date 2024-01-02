@@ -35,3 +35,26 @@ func InsertUser(user User) error {
 
 	return nil
 }
+
+func findUserByUserID(userID string) (User, error) {
+	db, err := connectDB()
+	if err != nil {
+		return User{}, err
+	}
+	defer db.Close()
+
+	var user User
+	err = db.QueryRow(
+		"SELECT user_id, username, password FROM users WHERE user_id = ?",
+		userID,
+	).Scan(
+		&user.UserID,
+		&user.Username,
+		&user.Password,
+	)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
+}
