@@ -59,6 +59,25 @@ func findUserByUserID(userID string) (User, error) {
 	return user, nil
 }
 
+func UpdateUsername(userID string, username string) error {
+	db, err := connectDB()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec(
+		"UPDATE users SET username = ? WHERE user_id = ?",
+		username,
+		userID,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func DeleteUser(userID string) error {
 	db, err := connectDB()
 	if err != nil {

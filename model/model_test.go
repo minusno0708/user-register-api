@@ -38,13 +38,29 @@ func TestFindUserByUserID(t *testing.T) {
 		t.Error(err)
 	}
 	if user.UserID != testUser.UserID {
-		t.Errorf("Expected %s, got %s", testUser.UserID, user.UserID)
+		t.Errorf("UserID is not match")
 	}
 	if user.Username != testUser.Username {
-		t.Errorf("Expected %s, got %s", testUser.Username, user.Username)
+		t.Errorf("Username is not match")
 	}
 	if user.Password != testUser.Password {
 		t.Errorf("Password is not match")
+	}
+}
+
+func TestUpdateUsername(t *testing.T) {
+	updatedName := "testuser_db_updated"
+	err := UpdateUsername(testUser.UserID, updatedName)
+	if err != nil {
+		t.Error(err)
+	}
+
+	user, err := findUserByUserID(testUser.UserID)
+	if err != nil {
+		t.Error(err)
+	}
+	if user.Username != updatedName {
+		t.Errorf("Failed to update username")
 	}
 }
 
