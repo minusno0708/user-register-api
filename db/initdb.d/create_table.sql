@@ -5,7 +5,7 @@ USE test_db;
 CREATE TABLE users
 (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    user_id VARCHAR(63),
+    user_id VARCHAR(63) UNIQUE,
     username VARCHAR(63),
     password VARCHAR(63)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

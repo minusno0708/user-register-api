@@ -25,6 +25,13 @@ func TestInsertUser(t *testing.T) {
 	}
 }
 
+func TestInsertUserDuplicate(t *testing.T) {
+	err := InsertUser(testUser)
+	if err == nil {
+		t.Error("Expected error, got nil")
+	}
+}
+
 func TestFindUserByUserID(t *testing.T) {
 	user, err := findUserByUserID(testUser.UserID)
 	if err != nil {
