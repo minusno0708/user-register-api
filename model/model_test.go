@@ -16,6 +16,10 @@ func TestConnectionDB(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+
+	if err := db.Ping(); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestInsertUser(t *testing.T) {
