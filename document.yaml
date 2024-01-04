@@ -106,6 +106,17 @@ paths:
                   summary: 既に存在するユーザーIDの場合
                   value:
                     message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
 
   /user/{user_id}: 
@@ -197,6 +208,17 @@ paths:
                   summary: 存在しないユーザーIDの場合
                   value:
                     message: User Not Found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
     put:
       tags:
@@ -279,6 +301,17 @@ paths:
                   summary: 既に存在するユーザーIDの場合
                   value:
                     message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
   /delete/{user_id}:
     delete:
@@ -353,6 +386,17 @@ paths:
                   summary: 既に存在するユーザーIDの場合
                   value:
                     message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
 components:
   schemas:
@@ -401,3 +445,12 @@ components:
             message:
               type: string
               example: "User not found"
+    DatabaseConnectionError:
+      type: object
+      properties:
+        database_connection_error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Database connection error"
