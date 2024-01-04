@@ -16,6 +16,7 @@ func main() {
 	})
 	r.POST("/signin", func(c *gin.Context) {
 		var user model.User
+
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": "Body does not exist",
@@ -32,7 +33,16 @@ func main() {
 			user.Username = user.UserID
 		}
 
-		err := model.InsertUser(user)
+		db, err := model.ConnectDB()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Database connection error",
+			})
+			return
+		}
+		defer db.Close()
+
+		err = model.InsertUser(db, user)
 		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{
 				"message": "User already exists",

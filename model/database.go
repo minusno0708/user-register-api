@@ -6,24 +6,22 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var dbAddress = "localhost:3306"
+var dbAddress = "db:3306"
 
-func connectDB() (*sql.DB, error) {
+func ConnectDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", "root:root@tcp("+dbAddress+")/test_db")
 	if err != nil {
 		return nil, err
 	}
+	if err = db.Ping(); err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
 
-func InsertUser(user User) error {
-	db, err := connectDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	
-	_, err = db.Exec(
+func InsertUser(db *sql.DB, user User) error {
+	_, err := db.Exec(
 		"INSERT INTO users (user_id, username, password) VALUES (?, ?, ?)",
 		user.UserID,
 		user.Username,
@@ -36,15 +34,9 @@ func InsertUser(user User) error {
 	return nil
 }
 
-func findUserByUserID(userID string) (User, error) {
-	db, err := connectDB()
-	if err != nil {
-		return User{}, err
-	}
-	defer db.Close()
-
+func findUserByUserID(db *sql.DB, userID string) (User, error) {
 	var user User
-	err = db.QueryRow(
+	err := db.QueryRow(
 		"SELECT user_id, username, password FROM users WHERE user_id = ?",
 		userID,
 	).Scan(
@@ -59,14 +51,8 @@ func findUserByUserID(userID string) (User, error) {
 	return user, nil
 }
 
-func UpdateUsername(userID string, username string) error {
-	db, err := connectDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	_, err = db.Exec(
+func UpdateUsername(db *sql.DB, userID string, username string) error {
+	_, err := db.Exec(
 		"UPDATE users SET username = ? WHERE user_id = ?",
 		username,
 		userID,
@@ -78,14 +64,8 @@ func UpdateUsername(userID string, username string) error {
 	return nil
 }
 
-func DeleteUser(userID string) error {
-	db, err := connectDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	_, err = db.Exec(
+func DeleteUser(db *sql.DB, userID string) error {
+	_, err := db.Exec(
 		"DELETE FROM users WHERE user_id = ?",
 		userID,
 	)

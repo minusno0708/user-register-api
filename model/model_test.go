@@ -11,33 +11,47 @@ var testUser = User{
 }
 
 func TestConnectionDB(t *testing.T) {
-	db, err := connectDB()
+	db, err := ConnectDB()
+	if err != nil {
+		t.Fatalf("Error connecting to the database: %v", err)
+	}
+	defer db.Close()
+}
+
+func TestInsertUser(t *testing.T) {
+	db, err := ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
 	defer db.Close()
 
-	if err := db.Ping(); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestInsertUser(t *testing.T) {
-	err := InsertUser(testUser)
+	err = InsertUser(db, testUser)
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestInsertUserDuplicate(t *testing.T) {
-	err := InsertUser(testUser)
+	db, err := ConnectDB()
+	if err != nil {
+		t.Error(err)
+	}
+	defer db.Close()
+
+	err = InsertUser(db, testUser)
 	if err == nil {
 		t.Error("Expected error, got nil")
 	}
 }
 
 func TestFindUserByUserID(t *testing.T) {
-	user, err := findUserByUserID(testUser.UserID)
+	db, err := ConnectDB()
+	if err != nil {
+		t.Error(err)
+	}
+	defer db.Close()
+
+	user, err := findUserByUserID(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -53,13 +67,19 @@ func TestFindUserByUserID(t *testing.T) {
 }
 
 func TestUpdateUsername(t *testing.T) {
+	db, err := ConnectDB()
+	if err != nil {
+		t.Error(err)
+	}
+	defer db.Close()
+
 	updatedName := "testuser_db_updated"
-	err := UpdateUsername(testUser.UserID, updatedName)
+	err = UpdateUsername(db, testUser.UserID, updatedName)
 	if err != nil {
 		t.Error(err)
 	}
 
-	user, err := findUserByUserID(testUser.UserID)
+	user, err := findUserByUserID(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -69,7 +89,13 @@ func TestUpdateUsername(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	err := DeleteUser(testUser.UserID)
+	db, err := ConnectDB()
+	if err != nil {
+		t.Error(err)
+	}
+	defer db.Close()
+
+	err = DeleteUser(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}
