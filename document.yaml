@@ -78,7 +78,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない場合
@@ -89,7 +89,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyValidationError'
+                $ref: '#/components/schemas/BodyValidationError'
               examples:
                 response1:
                   summary: Bodyの形式が正しくない場合
@@ -100,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserAlreadyExistsError'
+                $ref: '#/components/schemas/UserAlreadyExistsError'
               examples:
                 response1:
                   summary: 既に存在するユーザーIDの場合
@@ -111,7 +111,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/DatabaseConnectionError'
+                $ref: '#/components/schemas/DatabaseConnectionError'
               examples:
                 response1:
                   summary: データベースへの接続エラー
@@ -173,7 +173,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない場合
@@ -185,8 +185,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/BodyValidationError'
-                  - $ref: '#/components/responses/PassIncorrectError'
+                  - $ref: '#/components/schemas/BodyValidationError'
+                  - $ref: '#/components/schemas/PassIncorrectError'
               examples:
                 response1:
                   summary: Bodyの形式が正しくない場合
@@ -202,7 +202,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UserNotFoundError'
+                  - $ref: '#/components/schemas/UserNotFoundError'
               examples:
                 response1:
                   summary: 存在しないユーザーIDの場合
@@ -213,7 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/DatabaseConnectionError'
+                $ref: '#/components/schemas/DatabaseConnectionError'
               examples:
                 response1:
                   summary: データベースへの接続エラー
@@ -273,7 +273,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない場合
@@ -284,7 +284,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyValidationError'
+                $ref: '#/components/schemas/BodyValidationError'
               examples:
                 response1:
                   summary: Bodyの形式が正しくない場合
@@ -295,7 +295,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserAlreadyExistsError'
+                $ref: '#/components/schemas/UserAlreadyExistsError'
               examples:
                 response1:
                   summary: 既に存在するユーザーIDの場合
@@ -306,7 +306,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/DatabaseConnectionError'
+                $ref: '#/components/schemas/DatabaseConnectionError'
               examples:
                 response1:
                   summary: データベースへの接続エラー
@@ -358,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
                   summary: Bodyが存在しない場合
@@ -369,7 +369,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/BodyValidationError'
+                $ref: '#/components/schemas/BodyValidationError'
               examples:
                 response1:
                   summary: Bodyの形式が正しくない場合
@@ -380,7 +380,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserAlreadyExistsError'
+                $ref: '#/components/schemas/UserAlreadyExistsError'
               examples:
                 response1:
                   summary: 既に存在するユーザーIDの場合
@@ -391,7 +391,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/DatabaseConnectionError'
+                $ref: '#/components/schemas/DatabaseConnectionError'
               examples:
                 response1:
                   summary: データベースへの接続エラー
