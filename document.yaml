@@ -32,25 +32,29 @@ paths:
       description: |
         新しいユーザーを登録する
 
-      parameters:
-        - name: "body"
-          in: "body"
-          required: true
-          schema:
-            type: "object"
-            required:
-              - user_id
-              - password
-            properties:
-              user_id:
-                type: "string"
-              username:
-                type: "string"
-              password:
-                type: "string"
+      requestBody:
+        description: ユーザー情報
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - password
+              properties:
+                user_id:
+                  type: "string"
+                  example: "user_id"
+                username:
+                  type: "string"
+                  example: "username"
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
-        200:
+        201:
           description: Successful responses
           content:
             application/json:
@@ -70,22 +74,49 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
-                  - $ref: '#/components/responses/UserAlreadyExistsError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
                   value:
-                    message: Unauthorized
-                response2:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
+                  value:
+                    message: Body is not valid
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAlreadyExistsError'
+              examples:
+                response1:
                   summary: 既に存在するユーザーIDの場合
                   value:
                     message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
 
   /user/{user_id}: 
@@ -98,16 +129,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
         200:
@@ -130,27 +169,57 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyDoesNotExistError'
+              examples:
+                response1:
+                  summary: Bodyが存在しない場合
+                  value:
+                    message: Body does not exist
+        401:
+          description: Unauthorized
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
-                  - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
+                  - $ref: '#/components/schemas/BodyValidationError'
+                  - $ref: '#/components/schemas/PassIncorrectError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyの形式が正しくない場合
                   value:
-                    message: Unauthorized
+                    message: Body is not valid
                 response2:
                   summary: パスワードが正しくない場合
                   value:
                     message: Password is incorrect
-                response3:
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFoundError'
+              examples:
+                response1:
                   summary: 存在しないユーザーIDの場合
                   value:
-                    message: User does not exist
+                    message: User Not Found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
+
     put:
       tags:
         - user
@@ -160,18 +229,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              username:
-                type: "string"
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
 
       responses:
         200:
@@ -194,27 +269,49 @@ paths:
                         type: string
                         example: "username"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
-                  - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
                   value:
-                    message: Unauthorized
-                response2:
-                  summary: パスワードが正しくない場合
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
                   value:
-                    message: Password is incorrect
-                response3:
-                  summary: 存在しないユーザーIDの場合
+                    message: Body is not valid
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: 既に存在するユーザーIDの場合
                   value:
-                    message: User does not exist
+                    message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
   /delete/{user_id}:
     delete:
@@ -226,16 +323,24 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          required: true
-          type: "string"
-        - name: "body"
-          in: "body"
+          description: "ユーザーID"
           required: true
           schema:
-            type: "object"
-            properties:
-              password:
-                type: "string"
+            type: "string"
+
+      requestBody:
+        description: パスワード
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: "string"
+                  example: "password"
       
       responses:
         200:
@@ -249,39 +354,70 @@ paths:
                     type: string
                     example: "User can be deleted"
         400:
-          description: Failed responses
+          description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/responses/UnauthorizedError'
-                  - $ref: '#/components/responses/PassIncorrectError'
-                  - $ref: '#/components/responses/UserDoesNotExistError'
+                $ref: '#/components/schemas/BodyDoesNotExistError'
               examples:
                 response1:
-                  summary: Bodyが存在しない又は形式が正しくない場合
+                  summary: Bodyが存在しない場合
                   value:
-                    message: Unauthorized
-                response2:
-                  summary: パスワードが正しくない場合
+                    message: Body does not exist
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodyValidationError'
+              examples:
+                response1:
+                  summary: Bodyの形式が正しくない場合
                   value:
-                    message: Password is incorrect
-                response3:
-                  summary: 存在しないユーザーIDの場合
+                    message: Body is not valid
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAlreadyExistsError'
+              examples:
+                response1:
+                  summary: 既に存在するユーザーIDの場合
                   value:
-                    message: User does not exist
+                    message: User already exists
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseConnectionError'
+              examples:
+                response1:
+                  summary: データベースへの接続エラー
+                  value:
+                    message: Database connection error
 
 components:
-  responses:
-    UnauthorizedError:
+  schemas:
+    BodyDoesNotExistError:
       type: object
       properties:
-        unauthrized:
+        body_does_not_exists:
           type: object
           properties:
             message:
               type: string
-              example: "Unauthorized"
+              example: "Body does not exist"
+    BodyValidationError:
+      type: object
+      properties:
+        body_validation:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Body is not valid"
     PassIncorrectError:
       type: object
       properties:
@@ -294,18 +430,27 @@ components:
     UserAlreadyExistsError:
       type: object
       properties:
-        user_already_exist:
+        user_already_exists:
           type: object
           properties:
             message:
               type: string
               example: "User already exists"
-    UserDoesNotExistError:
+    UserNotFoundError:
       type: object
       properties:
-        user_does_not_exist:
+        user_not_found:
           type: object
           properties:
             message:
               type: string
-              example: "User does not exist"
+              example: "User not found"
+    DatabaseConnectionError:
+      type: object
+      properties:
+        database_connection_error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Database connection error"
