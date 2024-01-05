@@ -13,14 +13,6 @@ var testUser = domain.User{
 	Password: "test_password",
 }
 
-func TestConnectionDB(t *testing.T) {
-	db, err := config.ConnectDB()
-	if err != nil {
-		t.Fatalf("Error connecting to the database: %v", err)
-	}
-	defer db.Close()
-}
-
 func TestInsertUser(t *testing.T) {
 	db, err := config.ConnectDB()
 	if err != nil {
