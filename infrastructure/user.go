@@ -1,26 +1,12 @@
-package model
+package infrastructure
 
 import (
 	"database/sql"
-	
-	_ "github.com/go-sql-driver/mysql"
+
+	"user-register-api/domain"
 )
 
-var dbAddress = "db:3306"
-
-func ConnectDB() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:root@tcp("+dbAddress+")/test_db")
-	if err != nil {
-		return nil, err
-	}
-	if err = db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
-func InsertUser(db *sql.DB, user User) error {
+func InsertUser(db *sql.DB, user domain.User) error {
 	_, err := db.Exec(
 		"INSERT INTO users (user_id, username, password) VALUES (?, ?, ?)",
 		user.UserID,
@@ -34,8 +20,8 @@ func InsertUser(db *sql.DB, user User) error {
 	return nil
 }
 
-func findUserByUserID(db *sql.DB, userID string) (User, error) {
-	var user User
+func findUserByUserID(db *sql.DB, userID string) (domain.User, error) {
+	var user domain.User
 	err := db.QueryRow(
 		"SELECT user_id, username, password FROM users WHERE user_id = ?",
 		userID,
@@ -45,7 +31,7 @@ func findUserByUserID(db *sql.DB, userID string) (User, error) {
 		&user.Password,
 	)
 	if err != nil {
-		return User{}, err
+		return domain.User{}, err
 	}
 
 	return user, nil

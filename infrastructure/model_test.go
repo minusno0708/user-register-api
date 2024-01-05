@@ -1,17 +1,20 @@
-package model
+package infrastructure
 
 import (
 	"testing"
+
+	"user-register-api/config"
+	"user-register-api/domain"
 )
 
-var testUser = User{
+var testUser = domain.User{
 	UserID:   "testuser_db",
 	Username: "testuser_db",
 	Password: "test_password",
 }
 
 func TestConnectionDB(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Fatalf("Error connecting to the database: %v", err)
 	}
@@ -19,7 +22,7 @@ func TestConnectionDB(t *testing.T) {
 }
 
 func TestInsertUser(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
@@ -32,7 +35,7 @@ func TestInsertUser(t *testing.T) {
 }
 
 func TestInsertUserDuplicate(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
@@ -45,7 +48,7 @@ func TestInsertUserDuplicate(t *testing.T) {
 }
 
 func TestFindUserByUserID(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
@@ -67,7 +70,7 @@ func TestFindUserByUserID(t *testing.T) {
 }
 
 func TestUpdateUsername(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}
@@ -89,7 +92,7 @@ func TestUpdateUsername(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	db, err := ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		t.Error(err)
 	}

@@ -4,7 +4,9 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 
-	"user-register-api/model"
+	"user-register-api/config"
+	"user-register-api/domain"
+	"user-register-api/infrastructure"
 )
 
 func main() {
@@ -15,7 +17,7 @@ func main() {
 		})
 	})
 	r.POST("/signin", func(c *gin.Context) {
-		var user model.User
+		var user domain.User
 
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -33,7 +35,7 @@ func main() {
 			user.Username = user.UserID
 		}
 
-		db, err := model.ConnectDB()
+		db, err := config.ConnectDB()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Database connection error",
@@ -42,7 +44,7 @@ func main() {
 		}
 		defer db.Close()
 
-		err = model.InsertUser(db, user)
+		err = infrastructure.InsertUser(db, user)
 		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{
 				"message": "User already exists",
