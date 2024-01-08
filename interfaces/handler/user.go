@@ -58,7 +58,7 @@ func (uh userHandler) HandleUserSignin(c *gin.Context) {
 	}
 	defer db.Close()
 
-	err = uh.userUseCase.InsertUser(db, requestBody.UserID, requestBody.Username, requestBody.Password)
+	user, err := uh.userUseCase.InsertUser(db, requestBody.UserID, requestBody.Username, requestBody.Password)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "User already exists",
@@ -68,6 +68,6 @@ func (uh userHandler) HandleUserSignin(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User created successfully",
-		"user": requestBody,
+		"user": user,
 	})
 }

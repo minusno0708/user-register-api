@@ -24,7 +24,7 @@ func TestInsertUser(t *testing.T) {
 	userPersistence := persistence.NewUserPersistence()
 	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
+	_, err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
 	if err != nil {
 		t.Error(err)
 	}
@@ -39,7 +39,7 @@ func TestInsertUserDuplicate(t *testing.T) {
 	userPersistence := persistence.NewUserPersistence()
 	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
+	_, err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
 	if err == nil {
 		t.Error("Expected error, got nil")
 	}
