@@ -25,6 +25,10 @@ func NewUserUseCase(ur repository.UserRepository) UserUseCase {
 }
 
 func (uu userUseCase) InsertUser(db *sql.DB, userID, username, password string) error {
+	if username == "" {
+		username = userID
+	}
+	
 	err := uu.userRepository.InsertUser(db, userID, username, password)
 	if err != nil {
 		return err

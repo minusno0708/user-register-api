@@ -48,9 +48,6 @@ func (uh userHandler) HandleUserSignin(c *gin.Context) {
 		})
 		return
 	}
-	if requestBody.Username == "" {
-		requestBody.Username = requestBody.UserID
-	}
 
 	db, err := config.ConnectDB()
 	if err != nil {
