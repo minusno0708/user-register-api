@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"user-register-api/config"
-	"user-register-api/domain"
 	"user-register-api/usecase"
 )
 
@@ -31,22 +30,26 @@ func (uh userHandler) HandleConnectionAPI(c *gin.Context) {
 }
 
 func (uh userHandler) HandleUserSignin(c *gin.Context) {
-	var user domain.User
+	var requestBody struct {
+		UserID   string `json:"user_id"`
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Body does not exist",
 		})
 		return
 	}
-	if user.UserID == "" || user.Password == "" {
+	if requestBody.UserID == "" || requestBody.Password == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Body is not valid",
 		})
 		return
 	}
-	if user.Username == "" {
-		user.Username = user.UserID
+	if requestBody.Username == "" {
+		requestBody.Username = requestBody.UserID
 	}
 
 	db, err := config.ConnectDB()
@@ -58,7 +61,7 @@ func (uh userHandler) HandleUserSignin(c *gin.Context) {
 	}
 	defer db.Close()
 
-	err = uh.userUseCase.InsertUser(db, user.UserID, user.Username, user.Password)
+	err = uh.userUseCase.InsertUser(db, requestBody.UserID, requestBody.Username, requestBody.Password)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "User already exists",
@@ -68,6 +71,6 @@ func (uh userHandler) HandleUserSignin(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User created successfully",
-		"user": user,
+		"user": requestBody,
 	})
 }
