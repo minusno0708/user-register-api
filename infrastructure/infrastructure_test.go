@@ -5,6 +5,8 @@ import (
 
 	"user-register-api/config"
 	"user-register-api/domain"
+	"user-register-api/infrastructure/persistence"
+	"user-register-api/usecase"
 )
 
 var testUser = domain.User{
@@ -19,8 +21,10 @@ func TestInsertUser(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+	userPersistence := persistence.NewUserPersistence()
+	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	err = InsertUser(db, testUser)
+	err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
 	if err != nil {
 		t.Error(err)
 	}
@@ -32,8 +36,10 @@ func TestInsertUserDuplicate(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+	userPersistence := persistence.NewUserPersistence()
+	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	err = InsertUser(db, testUser)
+	err = userUseCase.InsertUser(db, testUser.UserID, testUser.Username, testUser.Password)
 	if err == nil {
 		t.Error("Expected error, got nil")
 	}
@@ -45,8 +51,10 @@ func TestFindUserByUserID(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+	userPersistence := persistence.NewUserPersistence()
+	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	user, err := findUserByUserID(db, testUser.UserID)
+	user, err := userUseCase.FindUserByUserID(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -67,14 +75,16 @@ func TestUpdateUsername(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+	userPersistence := persistence.NewUserPersistence()
+	userUseCase := usecase.NewUserUseCase(userPersistence)
 
 	updatedName := "testuser_db_updated"
-	err = UpdateUsername(db, testUser.UserID, updatedName)
+	err = userUseCase.UpdateUsername(db, testUser.UserID, updatedName)
 	if err != nil {
 		t.Error(err)
 	}
 
-	user, err := findUserByUserID(db, testUser.UserID)
+	user, err := userUseCase.FindUserByUserID(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}
@@ -89,8 +99,10 @@ func TestDeleteUser(t *testing.T) {
 		t.Error(err)
 	}
 	defer db.Close()
+	userPersistence := persistence.NewUserPersistence()
+	userUseCase := usecase.NewUserUseCase(userPersistence)
 
-	err = DeleteUser(db, testUser.UserID)
+	err = userUseCase.DeleteUser(db, testUser.UserID)
 	if err != nil {
 		t.Error(err)
 	}

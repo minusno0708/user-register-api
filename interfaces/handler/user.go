@@ -1,4 +1,4 @@
-package interfaces
+package handler
 
 import (
 	"net/http"
@@ -6,10 +6,24 @@ import (
 
 	"user-register-api/config"
 	"user-register-api/domain"
-	"user-register-api/infrastructure"
+	"user-register-api/usecase"
 )
 
-func HandleUserSignin(c *gin.Context) {
+type UserHandler interface {
+	HandleUserSignin(c *gin.Context)
+}
+
+type userHandler struct {
+	userUseCase usecase.UserUseCase
+}
+
+func NewUserHandler(uu usecase.UserUseCase) UserHandler {
+	return &userHandler{
+		userUseCase: uu,
+	}
+}
+
+func (uh userHandler) HandleUserSignin(c *gin.Context) {
 	var user domain.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -37,7 +51,7 @@ func HandleUserSignin(c *gin.Context) {
 	}
 	defer db.Close()
 
-	err = infrastructure.InsertUser(db, user)
+	err = uh.userUseCase.InsertUser(db, user.UserID, user.Username, user.Password)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "User already exists",
